@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${session.user != null}">图片分享交流平台</title>
+</head>
+<body>
+<div th:fragment="commonHeader">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://106.14.118.135:8080/"
+                   th:if="${session.user != null}"><strong>图片分享交流平台</strong></a>
+                <span th:if="${session.user != null}" class="navbar-brand"
+                      style="font-size: 14px;float: right"><span
+                        id="loginNum"></span></span>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <!--<li th:if="${session.user != null}"><a href="#" data-toggle="modal"-->
+                    <!--data-target="#uploadPicModal">上传</a></li>-->
+                    <li th:if="${session.user != null}">
+                        <a href="/pic/toUpload" style="padding-top: 17px">
+                            <span class="glyphicon glyphicon-upload"></span>
+                            &nbsp;我要上传</a>
+                    </li>
+                    <li th:if="${session.user != null}"><a href="/personal/personalPage" style="padding-top: 17px"><span
+                            class="glyphicon glyphicon-send"></span>
+                        &nbsp;我上传的</a>
+                    </li>
+                    <li th:if="${session.user != null}"><a href="/pic/uploadRank" style="padding-top: 17px"><span
+                            class="glyphicon glyphicon-signal"></span>
+                        &nbsp;上传排行榜</a></li>
+                    <!--                    <li><a href="#">SVN</a></li>-->
+                    <!--                    <li class="dropdown">-->
+                    <!--                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+                    <!--                            Java <b class="caret"></b>-->
+                    <!--                        </a>-->
+                    <!--                        <ul class="dropdown-menu">-->
+                    <!--                            <li><a href="#">jmeter</a></li>-->
+                    <!--                            <li><a href="#">EJB</a></li>-->
+                    <!--                            <li><a href="#">Jasper Report</a></li>-->
+                    <!--                            <li class="divider"></li>-->
+                    <!--                            <li><a href="#">分离的链接</a></li>-->
+                    <!--                            <li class="divider"></li>-->
+                    <!--                            <li><a href="#">另一个分离的链接</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </li>-->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a th:if="${session.user == null}" href="#" data-toggle="modal" data-target="#loginModal"
+                           style="padding-top: 17px">
+                            <span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;&nbsp;登录</a>
+                    </li>
+                    <li th:if="${session.user != null}" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 17px">
+                            <span th:text="${session.user.welcome}"></span> <span
+                                th:text="${session.user.realName}"></span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <!--                            <li><a href="/personal/personalPage"><span-->
+                            <!--                                    class="glyphicon glyphicon-menu-hamburger"></span>-->
+                            <!--                                &nbsp;&nbsp;个人中心</a>-->
+                            <!--                            </li>-->
+                            <li th:if="${session.user.getFlag() == 2}">
+                                <a onclick="refresh_cache()">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                    &nbsp;&nbsp;刷新缓存
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                    <span class="glyphicon glyphicon-log-out"></span>
+                                    &nbsp;&nbsp;登出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

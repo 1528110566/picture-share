@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf6z.dao.PictureMapper">
+    <resultMap id="BaseResultMap" type="com.hf6z.model.Picture">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="source_location" jdbcType="VARCHAR" property="sourceLocation"/>
+        <result column="zipped_location" jdbcType="VARCHAR" property="zippedLocation"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="source_link" jdbcType="VARCHAR" property="sourceLink"/>
+        <result column="zipped_link" jdbcType="VARCHAR" property="zippedLink"/>
+        <result column="flag" jdbcType="INTEGER" property="flag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, create_user, create_date, source_location, zipped_location, description, source_link,
+    zipped_link, flag, update_date
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pic
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from pic
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.hf6z.model.Picture">
+        insert into pic (id, create_user, create_date,
+                         source_location, zipped_location, description,
+                         source_link, zipped_link, flag)
+        values (#{id,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+                #{sourceLocation,jdbcType=VARCHAR}, #{zippedLocation,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+                #{sourceLink,jdbcType=VARCHAR}, #{zippedLink,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.hf6z.model.Picture">
+        insert into pic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="sourceLocation != null">
+                source_location,
+            </if>
+            <if test="zippedLocation != null">
+                zipped_location,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="sourceLink != null">
+                source_link,
+            </if>
+            <if test="zippedLink != null">
+                zipped_link,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sourceLocation != null">
+                #{sourceLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="zippedLocation != null">
+                #{zippedLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceLink != null">
+                #{sourceLink,jdbcType=VARCHAR},
+            </if>
+            <if test="zippedLink != null">
+                #{zippedLink,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hf6z.model.Picture">
+        update pic
+        <set>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sourceLocation != null">
+                source_location = #{sourceLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="zippedLocation != null">
+                zipped_location = #{zippedLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceLink != null">
+                source_link = #{sourceLink,jdbcType=VARCHAR},
+            </if>
+            <if test="zippedLink != null">
+                zipped_link = #{zippedLink,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hf6z.model.Picture">
+        update pic
+        set create_user     = #{createUser,jdbcType=VARCHAR},
+            create_date     = #{createDate,jdbcType=TIMESTAMP},
+            source_location = #{sourceLocation,jdbcType=VARCHAR},
+            zipped_location = #{zippedLocation,jdbcType=VARCHAR},
+            description     = #{description,jdbcType=VARCHAR},
+            source_link     = #{sourceLink,jdbcType=VARCHAR},
+            zipped_link     = #{zippedLink,jdbcType=VARCHAR},
+            flag            = #{flag,jdbcType=INTEGER},
+            update_date     = current_timestamp
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="getHotPicByReadNum" resultType="com.hf6z.model.Picture">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        order by read_num desc
+        limit #{num}
+    </select>
+    <select id="getHotPicVOByReadNum" resultType="com.hf6z.vo.PictureVO">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        order by read_num desc
+        limit #{num}
+    </select>
+    <select id="getHotPicByLikeNum" resultType="com.hf6z.model.Picture">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        order by like_num desc
+        limit #{num}
+    </select>
+    <select id="getHotPicVOByLikeNum" resultType="com.hf6z.vo.PictureVO">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        order by like_num desc
+        limit #{num}
+    </select>
+    <select id="getAllPic" resultType="com.hf6z.vo.PictureVO">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic;
+    </select>
+    <select id="getAllPicByUserName" resultType="com.hf6z.vo.PictureVO">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        where create_user = #{username};
+    </select>
+    <update id="updateByVO" parameterType="com.hf6z.vo.PictureVO">
+        update pic
+        set description = #{description},
+            read_num    = #{readNum},
+            like_num    = #{likeNum},
+            update_date = current_timestamp
+        where id = #{id}
+    </update>
+    <select id="getIdByZippedLink" resultType="java.lang.String">
+        select id
+        from pic
+        where zipped_link = #{zippedLink}
+    </select>
+    <select id="getPicVOById" resultType="com.hf6z.vo.PictureVO">
+        select id,
+               create_user,
+               create_date,
+               zipped_link,
+               source_link,
+               like_num,
+               read_num,
+               description
+        from pic
+        where id = #{id};
+    </select>
+    <select id="getNextId" resultType="java.lang.Integer">
+        select id
+        from pic
+        where id &gt; #{id}
+        order by id
+        limit 1;
+    </select>
+    <select id="getPreId" resultType="java.lang.Integer">
+        select id
+        from pic
+        where id &lt; #{id}
+        order by id desc
+        limit 1;
+    </select>
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select id
+        from pic
+        order by id desc
+        limit 1;
+    </select>
+    <select id="getMinId" resultType="java.lang.Integer">
+        select id
+        from pic
+        order by id
+        limit 1;
+    </select>
+    <select id="getUploadRank" resultType="com.hf6z.vo.UploadRankVO">
+        select create_user as username, count(0) as uploadNum
+        from pic
+        group by create_user
+        order by 2 desc, 1;
+    </select>
+</mapper>

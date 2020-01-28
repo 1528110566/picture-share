@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf6z.dao.LikeRecordMapper">
+  <resultMap id="BaseResultMap" type="com.hf6z.model.LikeRecord">
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="picId" jdbcType="INTEGER" property="picid" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hf6z.model.LikeRecord">
+    insert into like_record (username, picId, create_date
+      )
+    values (#{username,jdbcType=VARCHAR}, #{picid,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hf6z.model.LikeRecord">
+    insert into like_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="picid != null">
+        picId,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="picid != null">
+        #{picid,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

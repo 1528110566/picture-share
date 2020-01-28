@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>上传中转页面</title>
+</head>
+<body>
+<p th:text="${session.errorMsg}" id="msg" hidden="hidden"></p>
+<p>跳转中......</p>
+</body>
+<script>
+    var msg = document.getElementById('msg');
+    alert('上传失败，请检查是否登录！' + msg.innerText);
+    window.location.href = 'http://localhost:8080';
+</script>
+</html>

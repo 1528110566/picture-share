@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${session.user != null}">图片分享交流平台</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <link type="text/css" rel="stylesheet" th:href="@{/kartik-v-bootstrap-fileinput-5d9c093/css/fileinput.css}"/>-->
+    <!--    <script th:src="@{/kartik-v-bootstrap-fileinput-5d9c093/js/fileinput.js}"></script>-->
+    <!--    <script th:src="@{/kartik-v-bootstrap-fileinput-5d9c093/js/locales/zh.js}"></script>-->
+    <script th:src="@{/js/common.js}"></script>
+    <style>
+        .comment-textarea {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #c1c1c1;
+            font-size: 14px;
+        }
+
+        .comment-list-box {
+            margin-top: 0;
+            display: block;
+        }
+
+        .comment-list {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #dcdfe6;
+        }
+
+        .comment-user {
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .comment-date {
+            margin-left: 16px;
+            color: #999;
+        }
+
+        .comment-detail {
+            display: block;
+            margin-top: 8px;
+            color: #4d4d4d;
+        }
+    </style>
+</head>
+<body>
+<nav th:include="commons/header::commonHeader"></nav>
+<div th:include="commons/login-modal::loginModalFrag"></div>
+<div th:if="${status != 'fail'}" class="container" style="margin-top: 60px">
+    <h2 th:if="${session.user.getUsername() != pic.getCreateUser() && session.user.getFlag() != 2}"
+        th:text="${pic.getDescription()}"></h2>
+    <a th:if="${session.user.getUsername() == pic.getCreateUser() || session.user.getFlag() == 2}"
+       data-toggle="modal" data-target="#modifyDescModal">
+        <h2 th:text="${pic.getDescription()}"></h2>
+    </a>
+    <button type="button" th:if="${session.user.getUsername() == pic.getCreateUser() || session.user.getFlag() == 2}"
+            onclick="del()" class="btn btn-link">删除
+    </button>
+    <div id="pic-info" class="media">
+        <div class="media-body">
+            <div class="media-left">
+                <p style="color: #858585">上传者&nbsp;&nbsp;</p>
+                <a href="#" id="detail-link-a"><p style="color: #858585" th:text="${pic.getCreateUser()}"
+                                                  id="create-user"></p></a>
+            </div>
+            <div class="media-left">
+                <p style="color: #858585">上传时间&nbsp;&nbsp;</p>
+                <p style="color: #858585" th:text="${pic.getCreateDate()}"></p>
+            </div>
+            <div class="media-right">
+                <p style="color: #858585">阅读数&nbsp;&nbsp;</p>
+                <p style="color: #858585" th:text="${pic.getReadNum()}"></p>
+            </div>
+            <div class="media-right">
+                <p style="color: #858585"><a onclick="like()">点赞</a>数&nbsp;&nbsp;</p>
+                <p style="color: #858585" th:text="${pic.getLikeNum()}" id="likeNum"></p>
+            </div>
+        </div>
+        <hr style="margin-top: 10px;margin-bottom: 10px">
+    </div>
+    <p th:text="${pic.getId()}" hidden id="picID"></p>
+    <p th:text="${(pic.getCreateUser() == session.user.getUsername())||(session.user.getFlag() == 2)}"
+       id="check" hidden="hidden"></p>
+    <div class="carousel slide">
+        <img th:if="${type == 'zipped'}" id="zipped-pic" th:alt="${pic.getDescription()}"
+             th:src="${pic.getZippedLink()}" class="img-responsive">
+        <img th:if="${type == 'source'}" id="source-pic" th:alt="${pic.getDescription()}"
+             th:src="${pic.getSourceLink()}" class="img-responsive">
+        <a th:if="${hasPre == 'yes'}" class="left carousel-control" onclick="pre()" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a th:if="${hasNext == 'yes'}" class="right carousel-control" onclick="next()" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <hr>
+    <div>
+        <form id="comment-form" onsubmit="submitComment()">
+        <textarea class="comment-textarea" maxlength="100"
+                  onfocus="blurTest()" placeholder="说点什么吧..."
+                  id="comment-text" name="comment"></textarea>
+            <div id="submit-comment" hidden="hidden" style="float: right">
+                <span><span id="text-count">0</span>/100个字</span>
+                <span id="clear-button" hidden="hidden">
+                <button type="reset" class="btn btn-sm" onclick="clearText()">清空
+                </button>
+            </span>
+                <button type="submit" class="btn btn-sm btn-success" id="submit-button">提交评论
+                </button>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div id="comment-list-box" class="comment-list-box">
+    </div>
+    <div class="modal fade" id="modifyDescModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">修改图片描述</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/pic/modifyDesc" method="post" id="uploadPicForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="file-loading">
+                            <label for="picDesc"></label><input id="picDesc" name="picDesc" class="input-lg">
+                            <input hidden="hidden" id="id" name="id" th:value="${pic.getId()}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" title="Your custom upload logic">确认修改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:if="${status != 'fail'}">
+    function like() {
+        var id_P = document.getElementById("picID");
+        var id = id_P.innerText;
+        $.ajax({
+            url: "/pic/like/" + id,
+            sync: false
+        });
+        document.getElementById("likeNum").innerText++;
+    }
+
+    function pre() {
+        var id_P = document.getElementById("picID");
+        var id = id_P.innerText;
+        $.ajax({
+            url: "/pic/getPre/" + id,
+            sync: false,
+            success: function (message) {
+                if (message.status !== 'fail') {
+                    window.location.href = "http://localhost:8080/pic/" + message.link;
+                } else {
+                    window.location.href = "http://localhost:8080/";
+                }
+            }
+        })
+    }
+
+    function next() {
+        var id_P = document.getElementById("picID");
+        var id = id_P.innerText;
+        $.ajax({
+            url: "/pic/getNext/" + id,
+            sync: false,
+            success: function (message) {
+                if (message.status !== 'fail') {
+                    window.location.href = "http://localhost:8080/pic/" + message.link;
+                } else {
+                    window.location.href = "http://localhost:8080/";
+                }
+            }
+        })
+    }
+
+    function del() {
+        var id_P = document.getElementById("picID");
+        var id = id_P.innerText;
+        $.ajax({
+            url: "/pic/delete/" + id,
+            sync: false,
+            success: function (message) {
+                window.location.href = "http://localhost:8080/pic/" + message.link;
+            }
+        })
+    }
+</script>
+<script th:if="${status != 'fail'}">
+    var id_P = document.getElementById("picID");
+    var id = id_P.innerText;
+    getComment(id);
+    var check = document.getElementById("check").innerText;
+
+
+    function getComment(picId) {
+        $.ajax({
+            url: "/comment/getComment/" + picId,
+            sync: false,
+            success: function (message) {
+                if (message.status === 'ok') {
+                    var comment_list_box = document.getElementById("comment-list-box");
+                    comment_list_box.innerHTML = '';
+                    var comm = message.comments;
+                    var html = '';
+                    for (var i = 0; i < comm.length; i++) {
+                        html += '<div class="comment-list">';
+                        html += '<span class="comment-user">' + comm[i].username + '</span>';
+                        html += '<span class="comment-date">' + comm[i].createDate + '</sapn>';
+                        if (comm[i].check) {
+                            html += '<a href="' + comm[i].deleteLink + '" class="comment-date"' +
+                                ' style="float: right;margin-right: 20px">删除</a> ';
+                        }
+                        html += '<span class="comment-detail">' + comm[i].detail + '</span>';
+                        html += '</div>';
+                    }
+                    comment_list_box.innerHTML = html;
+                }
+            }
+        })
+    }
+
+    function submitComment() {
+        $.ajax({
+                url: "/comment/addComment/" + id,
+                data: $('#comment-form').serialize(),
+                type: "POST",
+                sync: false,
+                success: function (message) {
+                    if (message.status === 'ok') {
+                        alert("评论成功！");
+                        window.location.reload();
+                    } else if (message.status === 'fail') {
+                        alert("评论失败！")
+                    }
+                }, error: function () {
+                    alert("服务器连接失败！")
+                }
+            }
+        )
+    }
+</script>
+<script>
+    function blurTest() {
+        var submit_button = document.getElementById("submit-comment");
+        submit_button.removeAttribute("hidden");
+        var el = document.getElementById('comment-text');
+        if (textLength(el) === 0) {
+            document.getElementById("submit-button").setAttribute("disabled", "");
+        } else if (textLength(el) > 0) {
+            document.getElementById("submit-button").removeAttribute("disabled");
+        }
+    }
+
+    function blurTest1() {
+        var submit_button = document.getElementById("submit-comment");
+        submit_button.setAttribute("hidden", "hidden");
+    }
+
+    function clearText() {
+        document.getElementById("text-count").innerHTML = '0';
+        document.getElementById("clear-button").setAttribute("hidden", "hidden");
+        document.getElementById("submit-button").setAttribute("disabled", "");
+    }
+</script>
+<script>
+    function textLength(el) {
+        var val = el.value;
+        var eLen = val.length;
+        return eLen;
+    }
+
+    window.onload = function () {
+        var el = document.getElementById('comment-text');
+        el.addEventListener('input', function () {
+            var len = textLength(this); //   调用函数
+            document.getElementById('text-count').innerHTML = len;
+            if (len > 0) {
+                document.getElementById("clear-button").removeAttribute("hidden");
+                document.getElementById("submit-button").removeAttribute("disabled");
+            } else if (len === 0) {
+                document.getElementById("clear-button").setAttribute("hidden", "hidden");
+                document.getElementById("submit-button").setAttribute("disabled", "");
+            }
+        });
+        el.addEventListener('propertychange', function () {//兼容IE
+            var len = textLength(this); //   调用函数
+            document.getElementById('textCount').innerHTML = len;
+            if (len > 0) {
+                document.getElementById("clear-button").removeAttribute("hidden");
+                document.getElementById("submit-button").removeAttribute("disabled");
+            } else if (len === 0) {
+                document.getElementById("clear-button").setAttribute("hidden", "hidden");
+                document.getElementById("submit-button").setAttribute("disabled", "");
+            }
+        });
+    }
+</script>
+<script th:if="${session.user != null}">
+    window.setInterval(getLoginNum, 2000);
+</script>
+<script>
+    setDetailLink();
+
+    function setDetailLink() {
+        var createUser = document.getElementById("create-user").innerText;
+        var detailLink = "/personal/othersPage/" + createUser;
+        document.getElementById("detail-link-a").setAttribute("href", detailLink);
+    }
+</script>
+</html>

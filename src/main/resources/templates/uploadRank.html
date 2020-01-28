@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${session.user != null}">图片分享交流平台</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <style>
+        .uploadRank-list-box {
+            padding: 0 16px;
+
+        }
+
+        .uploadRank-list {
+            text-align: center;
+            margin: 0 auto;
+            padding: 16px 50px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .top-three {
+            margin-right: 16px;
+            text-align: center;
+            font-weight: bold;
+            color: #ca0c16;
+            float: left;
+            font-size: 18px;
+        }
+
+        .top {
+            margin-right: 16px;
+            text-align: center;
+            font-weight: bold;
+            color: #999999;
+            float: left;
+            font-size: 16px;
+        }
+
+        .username {
+            font-weight: bold;
+            padding-top: 3px;
+        }
+
+        .num {
+            font-weight: bold;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<nav th:include="commons/header::commonHeader"></nav>
+<div th:include="commons/login-modal::loginModalFrag"></div>
+<div class="container" th:if="${session.user != null}" style="margin-top: 60px">
+    <div id="uploadRank-list-box" class="uploadRank-list-box">
+        <div class="uploadRank-list">
+            <span class="top-three">1</span>
+            <span class="username">taozheng</span>
+            <span class="num">100</span>
+        </div>
+    </div>
+</div>
+</body>
+<script th:if="${session.user != null}">
+    window.setInterval(getLoginNum, 2000);
+    getUploadRank();
+
+    function getUploadRank() {
+        $.ajax({
+            url: "/pic/getUploadRank",
+            sync: false,
+            success: function (message) {
+                if (message.status === 'ok') {
+                    var uploadRank_div = document.getElementById("uploadRank-list-box");
+                    uploadRank_div.innerHTML = '';
+                    var top = message.rank;
+                    var html = '';
+                    for (var i = 0; i < top.length; i++) {
+                        html += '<div class="uploadRank-list">';
+                        if (i < 3) {
+                            html += '<span class="top-three">' + (i + 1) + '</span>';
+                        } else {
+                            html += '<span class="top">' + (i + 1) + '</span>';
+                        }
+                        html += '<a href="/personal/othersPage/' + top[i].username + '"><span class="username" id="user">' + top[i].username + '</span></a>';
+                        html += '<span class="num">' + top[i].uploadNum + '</span>';
+                        html += '</div>';
+                    }
+                    uploadRank_div.innerHTML = html;
+                }
+            }
+        })
+    }
+</script>
+</html>

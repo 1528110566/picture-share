@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>上传中转页面</title>
+</head>
+<body>
+<p th:text="${session.upload_num}" id="num" hidden="hidden"></p>
+<p>跳转中......</p>
+</body>
+<script>
+    var num = document.getElementById('num');
+    alert("成功上传" + num.innerText + "张照片");
+    window.location.href = 'http://localhost:8080';
+</script>
+</html>

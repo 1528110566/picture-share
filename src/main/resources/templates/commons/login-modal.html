@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${session.user != null}">图片分享交流平台</title>
+</head>
+<body>
+<div th:fragment="loginModalFrag">
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <strong>请登录</strong>
+                    </h4>
+                </div>
+                <form method="post" id="loginForm">
+                    <div class="modal-body" style="text-align: center">
+                        <label><input class="form-control" type="text" name="username"
+                                      placeholder="姓名" required></label>
+                        <br>
+                        <label><input class="form-control" type="password" name="password"
+                                      placeholder="密码" required></label>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary" onclick="login()">
+                            登录
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+</body>
+</html>

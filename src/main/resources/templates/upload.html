@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${session.user != null}">图片分享交流平台</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/kartik-v-bootstrap-fileinput-5d9c093/css/fileinput.css}"/>
+    <script th:src="@{/kartik-v-bootstrap-fileinput-5d9c093/js/fileinput.js}"></script>
+    <script th:src="@{/kartik-v-bootstrap-fileinput-5d9c093/js/locales/zh.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+</head>
+<body>
+<nav th:include="commons/header::commonHeader"></nav>
+<div th:include="commons/login-modal::loginModalFrag"></div>
+<div class="container" th:if="${session.user != null}" style="margin-top: 60px">
+    <div>
+        <h1 style="color: red">上传总大小不能超过100M，单张不能超过10M，只接受.jpg和.png格式</h1>
+        <form action="/pic/upload" method="post" id="uploadPicForm" enctype="multipart/form-data">
+            <input id="input-b1" name="pic" type="file" class="file"
+                   data-browse-on-zone-click="true"
+                   multiple="multiple" data-allowed-file-extensions='["jpg", "png"]'>
+        </form>
+    </div>
+</div>
+</body>
+<script th:if="${session.user != null}">
+    window.setInterval(getLoginNum, 2000);
+</script>
+</html>
