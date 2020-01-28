@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hf6z.dao.CommentMapper">
-    <resultMap id="BaseResultMap" type="com.hf6z.model.Comment">
+<mapper namespace="com.picshare.dao.CommentMapper">
+    <resultMap id="BaseResultMap" type="com.picshare.model.Comment">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="picId" jdbcType="INTEGER" property="picid"/>
@@ -22,13 +22,13 @@
         from comment
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.hf6z.model.Comment">
+    <insert id="insert" parameterType="com.picshare.model.Comment">
         insert into comment (id, username, picId,
                              detail, create_date)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{picid,jdbcType=INTEGER},
                 #{detail,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.hf6z.model.Comment">
+    <insert id="insertSelective" parameterType="com.picshare.model.Comment">
         insert into comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -65,7 +65,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.hf6z.model.Comment">
+    <update id="updateByPrimaryKeySelective" parameterType="com.picshare.model.Comment">
         update comment
         <set>
             <if test="username != null">
@@ -83,7 +83,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.hf6z.model.Comment">
+    <update id="updateByPrimaryKey" parameterType="com.picshare.model.Comment">
         update comment
         set username    = #{username,jdbcType=VARCHAR},
             picId       = #{picid,jdbcType=INTEGER},
@@ -91,16 +91,16 @@
             create_date = #{createDate,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getAll" resultType="com.hf6z.model.Comment">
+    <select id="getAll" resultType="com.picshare.model.Comment">
         select *
         from comment;
     </select>
-    <select id="getByPicId" resultType="com.hf6z.model.Comment">
+    <select id="getByPicId" resultType="com.picshare.model.Comment">
         select *
         from comment
         where picId = #{id};
     </select>
-    <select id="getByUsername" resultType="com.hf6z.model.Comment">
+    <select id="getByUsername" resultType="com.picshare.model.Comment">
         select *
         from comment
         where username = #{username};
@@ -109,7 +109,7 @@
         select max(id)
         from comment;
     </select>
-    <select id="getCommentRangeById" resultType="com.hf6z.model.Comment">
+    <select id="getCommentRangeById" resultType="com.picshare.model.Comment">
         select *
         from comment
         where id &gt; #{currentId}

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hf6z.dao.LikeRecordMapper">
-  <resultMap id="BaseResultMap" type="com.hf6z.model.LikeRecord">
+<mapper namespace="com.picshare.dao.LikeRecordMapper">
+  <resultMap id="BaseResultMap" type="com.picshare.model.LikeRecord">
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="picId" jdbcType="INTEGER" property="picid" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
   </resultMap>
-  <insert id="insert" parameterType="com.hf6z.model.LikeRecord">
+  <insert id="insert" parameterType="com.picshare.model.LikeRecord">
     insert into like_record (username, picId, create_date
       )
     values (#{username,jdbcType=VARCHAR}, #{picid,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.hf6z.model.LikeRecord">
+  <insert id="insertSelective" parameterType="com.picshare.model.LikeRecord">
     insert into like_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="username != null">

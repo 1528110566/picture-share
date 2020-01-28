@@ -8,10 +8,10 @@
         <version>2.2.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.hf6z</groupId>
-    <artifactId>hf6z</artifactId>
+    <groupId>com.picshare</groupId>
+    <artifactId>picshare</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hf6z</name>
+    <name>picshare</name>
     <description>memory</description>
 
     <properties>
@@ -21,10 +21,10 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>

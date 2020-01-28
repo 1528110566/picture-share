@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hf6z.dao.WishMapper">
-    <resultMap id="BaseResultMap" type="com.hf6z.model.Wish">
+<mapper namespace="com.picshare.dao.WishMapper">
+    <resultMap id="BaseResultMap" type="com.picshare.model.Wish">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="detail" jdbcType="VARCHAR" property="detail"/>
@@ -21,13 +21,13 @@
         from wish
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.hf6z.model.Wish">
+    <insert id="insert" parameterType="com.picshare.model.Wish">
         insert into wish (id, username, detail,
                           create_date)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR},
                 #{createDate,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.hf6z.model.Wish">
+    <insert id="insertSelective" parameterType="com.picshare.model.Wish">
         insert into wish
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -58,7 +58,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.hf6z.model.Wish">
+    <update id="updateByPrimaryKeySelective" parameterType="com.picshare.model.Wish">
         update wish
         <set>
             <if test="username != null">
@@ -73,20 +73,20 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.hf6z.model.Wish">
+    <update id="updateByPrimaryKey" parameterType="com.picshare.model.Wish">
         update wish
         set username    = #{username,jdbcType=VARCHAR},
             detail      = #{detail,jdbcType=VARCHAR},
             create_date = #{createDate,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getTop2Wish" resultType="com.hf6z.model.Wish">
+    <select id="getTop2Wish" resultType="com.picshare.model.Wish">
         select *
         from wish
         order by id desc
         limit 2;
     </select>
-    <select id="getTeachers" resultType="com.hf6z.model.Wish">
+    <select id="getTeachers" resultType="com.picshare.model.Wish">
         select *
         from wish
         where username in (select username from user where flag = 1);

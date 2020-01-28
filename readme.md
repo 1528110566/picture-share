@@ -4,6 +4,8 @@
 
 结合Redis时，使用的全部都是StringRedisTemplate进行交互，避免了序列化问题，这样可以直接在终端看到Redis存储的信息，只是在转换时比较麻烦。
 
+本项目可具有在线人数实时显示和首页评论实时显示的功能，登录时首页只显示**部分**评论。
+
 _使用须知_：
 
 1.注意**application.properties**中*redis*和*fdfs_tracker*的配置，以及**图片详情页**的跳转链接、**upload-fail.html**、**upload-ok.html**的跳转连接，实际使用前需要更换；

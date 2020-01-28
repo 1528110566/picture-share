@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hf6z.dao.PictureMapper">
-    <resultMap id="BaseResultMap" type="com.hf6z.model.Picture">
+<mapper namespace="com.picshare.dao.PictureMapper">
+    <resultMap id="BaseResultMap" type="com.picshare.model.Picture">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
@@ -27,7 +27,7 @@
         from pic
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.hf6z.model.Picture">
+    <insert id="insert" parameterType="com.picshare.model.Picture">
         insert into pic (id, create_user, create_date,
                          source_location, zipped_location, description,
                          source_link, zipped_link, flag)
@@ -35,7 +35,7 @@
                 #{sourceLocation,jdbcType=VARCHAR}, #{zippedLocation,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
                 #{sourceLink,jdbcType=VARCHAR}, #{zippedLink,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.hf6z.model.Picture">
+    <insert id="insertSelective" parameterType="com.picshare.model.Picture">
         insert into pic
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -96,7 +96,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.hf6z.model.Picture">
+    <update id="updateByPrimaryKeySelective" parameterType="com.picshare.model.Picture">
         update pic
         <set>
             <if test="createUser != null">
@@ -126,7 +126,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.hf6z.model.Picture">
+    <update id="updateByPrimaryKey" parameterType="com.picshare.model.Picture">
         update pic
         set create_user     = #{createUser,jdbcType=VARCHAR},
             create_date     = #{createDate,jdbcType=TIMESTAMP},
@@ -139,7 +139,7 @@
             update_date     = current_timestamp
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getHotPicByReadNum" resultType="com.hf6z.model.Picture">
+    <select id="getHotPicByReadNum" resultType="com.picshare.model.Picture">
         select id,
                create_user,
                create_date,
@@ -152,7 +152,7 @@
         order by read_num desc
         limit #{num}
     </select>
-    <select id="getHotPicVOByReadNum" resultType="com.hf6z.vo.PictureVO">
+    <select id="getHotPicVOByReadNum" resultType="com.picshare.vo.PictureVO">
         select id,
                create_user,
                create_date,
@@ -165,7 +165,7 @@
         order by read_num desc
         limit #{num}
     </select>
-    <select id="getHotPicByLikeNum" resultType="com.hf6z.model.Picture">
+    <select id="getHotPicByLikeNum" resultType="com.picshare.model.Picture">
         select id,
                create_user,
                create_date,
@@ -178,7 +178,7 @@
         order by like_num desc
         limit #{num}
     </select>
-    <select id="getHotPicVOByLikeNum" resultType="com.hf6z.vo.PictureVO">
+    <select id="getHotPicVOByLikeNum" resultType="com.picshare.vo.PictureVO">
         select id,
                create_user,
                create_date,
@@ -191,7 +191,7 @@
         order by like_num desc
         limit #{num}
     </select>
-    <select id="getAllPic" resultType="com.hf6z.vo.PictureVO">
+    <select id="getAllPic" resultType="com.picshare.vo.PictureVO">
         select id,
                create_user,
                create_date,
@@ -202,7 +202,7 @@
                description
         from pic;
     </select>
-    <select id="getAllPicByUserName" resultType="com.hf6z.vo.PictureVO">
+    <select id="getAllPicByUserName" resultType="com.picshare.vo.PictureVO">
         select id,
                create_user,
                create_date,
@@ -214,7 +214,7 @@
         from pic
         where create_user = #{username};
     </select>
-    <update id="updateByVO" parameterType="com.hf6z.vo.PictureVO">
+    <update id="updateByVO" parameterType="com.picshare.vo.PictureVO">
         update pic
         set description = #{description},
             read_num    = #{readNum},
@@ -227,7 +227,7 @@
         from pic
         where zipped_link = #{zippedLink}
     </select>
-    <select id="getPicVOById" resultType="com.hf6z.vo.PictureVO">
+    <select id="getPicVOById" resultType="com.picshare.vo.PictureVO">
         select id,
                create_user,
                create_date,
@@ -265,7 +265,7 @@
         order by id
         limit 1;
     </select>
-    <select id="getUploadRank" resultType="com.hf6z.vo.UploadRankVO">
+    <select id="getUploadRank" resultType="com.picshare.vo.UploadRankVO">
         select create_user as username, count(0) as uploadNum
         from pic
         group by create_user
